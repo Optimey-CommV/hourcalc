@@ -13,7 +13,7 @@
 #endif
 
 #ifndef HC_APP_ID
-#define HC_APP_ID "io.github.Optimey_CommV.HourCalc"
+#define HC_APP_ID "be.optimey.HourCalc"
 #endif
 #ifndef HC_VERSION
 #define HC_VERSION "1.0.0"

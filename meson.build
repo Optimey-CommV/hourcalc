@@ -17,8 +17,8 @@ project('hourcalc', 'cpp',
 
 fs = import('fs')
 
-# Placeholder until the owner confirms the repository / domain (docs/LINUX.md, section 4).
-app_id = 'io.github.Optimey_CommV.HourCalc'
+# Reverse-DNS name on the owner's domain optimey.be (docs/LINUX.md, section 4).
+app_id = 'be.optimey.HourCalc'
 app_version = meson.project_version()
 source_url = 'https://github.com/Optimey-CommV/hourcalc'
 
