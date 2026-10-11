@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2026 Optimey CommV
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+version = 1
+SPDX-PackageName = "HourCalc"
+SPDX-PackageSupplier = "Optimey CommV"
+SPDX-PackageDownloadLocation = "https://github.com/Optimey-CommV/hourcalc"
+
+# Files that cannot carry a header of their own: Markdown documentation, screenshots, the icon
+# files, a compiler response file, the PNG icons for Linux (rendered from assets/icon by
+# tools/make_linux_icons.py) and the Debian files whose formats have no comments.
+[[annotations]]
+path = [
+    "README.md",
+    "docs/**",
+    "assets/icon/app.ico",
+    "tools/cflags.rsp",
+    "linux/data/icons/**",
+    "debian/changelog",
+    "debian/copyright",
+    "debian/source/format",
+]
+SPDX-FileCopyrightText = "2026 Optimey CommV"
+SPDX-License-Identifier = "GPL-3.0-or-later"

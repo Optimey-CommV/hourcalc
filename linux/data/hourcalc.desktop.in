@@ -1,0 +1,13 @@
+[Desktop Entry]
+# SPDX-FileCopyrightText: 2026 Optimey CommV
+# SPDX-License-Identifier: GPL-3.0-or-later
+Type=Application
+Name=HourCalc
+GenericName=Hours Calculator
+Comment=Convert hours between h:mm and decimal hours, and calculate with hours
+Exec=hourcalc
+Icon=@APP_ID@
+Terminal=false
+Categories=Utility;Calculator;
+Keywords=hours;minutes;time;decimal;convert;converter;timesheet;duration;
+StartupNotify=true

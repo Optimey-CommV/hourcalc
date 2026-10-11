@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: 2026 Optimey CommV
+# SPDX-License-Identifier: GPL-3.0-or-later
+Source: hourcalc
+Section: utils
+Priority: optional
+Maintainer: Optimey CommV <335730383+optimey@users.noreply.github.com>
+Build-Depends:
+ debhelper-compat (= 13),
+ libadwaita-1-dev,
+ libgtk-4-dev,
+ meson (>= 1.0.0),
+ ninja-build,
+ pkgconf,
+ qt6-base-dev,
+Standards-Version: 4.7.2
+Homepage: https://github.com/Optimey-CommV/hourcalc
+Rules-Requires-Root: no
+
+Package: hourcalc
+Architecture: amd64
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: convert hours between h:mm and decimal hours, and calculate with hours
+ HourCalc converts hours between hours and minutes (08:30) and decimal hours
+ (8,50): type in either field and the other one follows at once. A second tab
+ calculates with hours: it adds and subtracts durations and multiplies and
+ divides them by a factor. The number of decimal places (2 to 6) and the
+ theme (system, light or dark) are settings.
+ .
+ The program looks native on both major desktops. This package ships two front
+ ends on one shared core: GTK 4 with libadwaita for GNOME and Qt 6 for KDE
+ Plasma. The hourcalc command starts the one that fits the desktop; set
+ HOURCALC_UI=gtk or HOURCALC_UI=qt to choose.

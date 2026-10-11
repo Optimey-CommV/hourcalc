@@ -1,0 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Optimey CommV
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# There is no upstream release page to watch yet: the package is built from the repository
+# tree (tools/build-deb.sh) and the repository address is still a placeholder.
+hourcalc: debian-watch-file-is-missing

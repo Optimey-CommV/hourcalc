@@ -33,3 +33,7 @@ id_ed25519*
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# HourCalc build output (Windows: build*.ps1, Linux: meson)
+obj/
+/builddir/

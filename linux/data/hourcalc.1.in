@@ -1,0 +1,100 @@
+.\" SPDX-FileCopyrightText: 2026 Optimey CommV
+.\" SPDX-License-Identifier: GPL-3.0-or-later
+.\" Template of linux/data/meson.build: the version and the libexec directory are filled in at
+.\" build time.
+.TH HOURCALC 1 "2026-10-10" "HourCalc @VERSION@" "User Commands"
+.SH NAME
+hourcalc \- convert hours between h:mm and decimal hours, and calculate with hours
+.SH SYNOPSIS
+.B hourcalc
+.RI [ option ...]
+.SH DESCRIPTION
+.B HourCalc
+converts hours between hours and minutes (08:30) and decimal hours (8.50), and calculates
+with hours.
+The converter tab has two fields side by side: type in either one and the other follows at
+once.
+The calculator tab adds and subtracts durations and multiplies and divides them by a
+factor.
+.PP
+.B hourcalc
+starts the front end that fits the desktop.
+On KDE Plasma (\fBXDG_CURRENT_DESKTOP\fR contains KDE) it is the Qt 6 front end, on every
+other desktop the GTK 4 and libadwaita one.
+Both have the same tabs, keys and behaviour and use the widgets, fonts and colours of
+their desktop.
+Every argument is passed on to the front end unchanged.
+.SH OPTIONS
+.TP
+.BR \-h ", " \-\-help
+Print a short usage text and exit.
+.TP
+.B \-\-version
+Print the name and the version of the front end that was started
+(for example "hourcalc-gtk 1.0.0") and exit.
+.PP
+The front ends also take the options of their toolkit (GTK and GLib:
+.BR \-\-help\-all ;
+Qt:
+.BR \-style ", " \-platform ", ...)."
+.SH ENVIRONMENT
+.TP
+.B HOURCALC_UI
+.B gtk
+or
+.B qt
+(in any case) starts that front end whatever the desktop is.
+If it is not installed the other one is started.
+Any other value is ignored.
+.TP
+.B HOURCALC_RENDERER
+GTK front end only.
+Without a usable graphics device (no render node under
+.IR /dev/dri ,
+as in many virtual machines and remote sessions) the window is painted by the cairo
+renderer, which is faster to start than GTK's GPU renderers running in software; with one,
+GTK chooses.
+.B gtk
+leaves the choice to GTK in every case, any other value (for example
+.BR cairo ", " ngl " or " vulkan )
+is passed on to GTK as
+.BR GSK_RENDERER ,
+which wins over this variable when it is set.
+.TP
+.B XDG_CURRENT_DESKTOP
+Chooses the front end when
+.B HOURCALC_UI
+is not set.
+.TP
+.B XDG_CONFIG_HOME
+Where the settings file lives, see
+.BR FILES .
+.SH FILES
+.TP
+.I $XDG_CONFIG_HOME/hourcalc/hourcalc.ini
+The settings, usually
+.IR ~/.config/hourcalc/hourcalc.ini .
+It is made by the first change of a setting and holds one setting per line:
+.B DecimalPlaces
+(2 to 6, default 2) and
+.B Theme
+(\fBauto\fR, \fBlight\fR or \fBdark\fR, default \fBauto\fR, which follows the system).
+Delete the file to go back to the defaults.
+.TP
+.I @LIBEXECDIR@/hourcalc-gtk
+The GTK 4 and libadwaita front end.
+.TP
+.I @LIBEXECDIR@/hourcalc-qt
+The Qt 6 front end.
+.SH EXIT STATUS
+.B hourcalc
+exits with the status of the front end it started, and with 127 when no front end is
+installed.
+.SH AUTHORS
+Optimey CommV.
+.SH COPYRIGHT
+Copyright 2026 Optimey CommV.
+HourCalc is free software: you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation, either version 3 of
+the License, or (at your option) any later version.
+It comes with ABSOLUTELY NO WARRANTY.

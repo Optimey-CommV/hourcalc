@@ -1,0 +1,12 @@
+<!-- SPDX-FileCopyrightText: 2026 Optimey CommV -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+<!-- 16 px grid: 1 px = 16 units, every straight edge is a multiple of 16 -->
+<defs><clipPath id="tr"><rect x="128" y="0" width="128" height="112"/></clipPath><clipPath id="br"><rect x="128" y="128" width="128" height="128"/></clipPath><clipPath id="bl"><rect x="0" y="128" width="112" height="128"/></clipPath></defs>
+<circle cx="128" cy="128" r="112" fill="#129DC4" clip-path="url(#tr)"/>
+<circle cx="128" cy="128" r="112" fill="#129DC4" clip-path="url(#br)"/>
+<circle cx="128" cy="128" r="112" fill="#129DC4" clip-path="url(#bl)"/>
+<path d="M112,112 L112,17.1487 A112,112 0 0 0 17.1487,112 Z M96,96 L96,37.4903 A96,96 0 0 0 37.4903,96 Z" fill="#129DC4" fill-rule="evenodd"/>
+<rect x="96" y="32" width="48" height="112" fill="#129DC4"/>
+<rect x="112" y="48" width="16" height="80" fill="#FFFFFF"/>
+</svg>

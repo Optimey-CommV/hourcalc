@@ -1,0 +1,13 @@
+<!-- SPDX-FileCopyrightText: 2026 Optimey CommV -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+<!-- 24 px grid: 1 px = 256/24 units; the group is scaled so all numbers are whole pixels -->
+<g transform="scale(10.666667)">
+<path d="M12,11 L12,1 A11,11 0 0 1 22.9545,11 Z" fill="#129DC4"/>
+<path d="M12,12 L23,12 A11,11 0 0 1 12,23 Z" fill="#129DC4"/>
+<path d="M11,12 L11,22.9545 A11,11 0 0 1 1,12 Z" fill="#129DC4"/>
+<path d="M11,11 L11,1.0455 A11,11 0 0 0 1.0455,11 Z M9,9 L9,3.5147 A9,9 0 0 0 3.5147,9 Z" fill="#129DC4" fill-rule="evenodd"/>
+<rect x="10" y="3" width="4" height="10" fill="#129DC4"/>
+<rect x="11" y="4" width="2" height="8" fill="#FFFFFF"/>
+</g>
+</svg>

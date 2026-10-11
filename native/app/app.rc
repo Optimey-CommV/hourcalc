@@ -1,0 +1,52 @@
+// SPDX-FileCopyrightText: 2026 Optimey CommV
+// SPDX-License-Identifier: GPL-3.0-or-later
+
+// HourCalc resources: the icon, the version information, the manifest and the source archive.
+// Pure ASCII. build-app.ps1 writes res_paths.h (ICON_FILE, MANIFEST_FILE, a copy of app.manifest without
+// comments and indentation, and SOURCE_ZIP; absolute paths with forward slashes) next to the object files
+// and adds that folder with /i. With
+// HC_NO_EMBEDDED_SOURCE (build-app.ps1 -NoEmbeddedSource) the exe carries no source archive; res_paths.h then
+// defines LICENSE_FILE, the deflated LICENSE, instead of SOURCE_ZIP.
+
+#include <winres.h>
+#include "version.h"
+#include "res_paths.h"
+
+1 ICON ICON_FILE
+
+1 RT_MANIFEST MANIFEST_FILE
+
+#ifdef HC_NO_EMBEDDED_SOURCE
+102 RCDATA LICENSE_FILE
+#else
+101 RCDATA SOURCE_ZIP
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION HC_VER_MAJOR, HC_VER_MINOR, HC_VER_PATCH, 0
+ PRODUCTVERSION HC_VER_MAJOR, HC_VER_MINOR, HC_VER_PATCH, 0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Optimey CommV"
+            VALUE "FileDescription", "HourCalc - hours converter and calculator"
+            VALUE "FileVersion", HC_VER_FILE_STR
+            VALUE "InternalName", "HourCalc"
+            VALUE "LegalCopyright", "Copyright (c) 2026 Optimey CommV"
+            VALUE "OriginalFilename", "HourCalc.exe"
+            VALUE "ProductName", "HourCalc"
+            VALUE "ProductVersion", HC_VER_STR
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

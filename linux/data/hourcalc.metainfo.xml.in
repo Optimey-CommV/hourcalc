@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  SPDX-FileCopyrightText: 2026 Optimey CommV
+  SPDX-License-Identifier: CC0-1.0
+-->
+<component type="desktop-application">
+  <id>@APP_ID@</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>HourCalc</name>
+  <summary>Convert between h:mm and decimal hours</summary>
+  <developer id="@DEVELOPER_ID@">
+    <name>Optimey CommV</name>
+  </developer>
+  <description>
+    <p>
+      HourCalc converts hours between hours and minutes (08:30) and decimal hours (8,50), and
+      calculates with hours. Type in either field of the converter and the other one follows
+      at once.
+    </p>
+    <ul>
+      <li>Converter: hours and minutes on the left, decimal hours on the right, both ways, live</li>
+      <li>Calculator: add and subtract durations, multiply and divide them by a factor</li>
+      <li>Two to six decimal places, the decimal separator of your locale</li>
+      <li>Follows the system theme, or stays light or dark as you choose</li>
+    </ul>
+    <p>
+      The program is native on both major desktops: GTK 4 with libadwaita on GNOME and Qt 6 on
+      KDE Plasma.
+    </p>
+  </description>
+  <launchable type="desktop-id">@APP_ID@.desktop</launchable>
+  <url type="homepage">@SOURCE_URL@</url>
+  <url type="bugtracker">@SOURCE_URL@/issues</url>
+  <provides>
+    <binary>hourcalc</binary>
+  </provides>
+  <keywords>
+    <keyword>hours</keyword>
+    <keyword>minutes</keyword>
+    <keyword>time</keyword>
+    <keyword>decimal</keyword>
+    <keyword>timesheet</keyword>
+    <keyword>duration</keyword>
+  </keywords>
+  <content_rating type="oars-1.1"/>
+  <branding>
+    <color type="primary" scheme_preference="light">#28c4e6</color>
+    <color type="primary" scheme_preference="dark">#0b7faf</color>
+  </branding>
+  <releases>
+    <release version="1.0.0" date="2026-10-10">
+      <description>
+        <p>First release for Linux: GTK 4 and Qt 6 front ends on one shared core.</p>
+      </description>
+    </release>
+  </releases>
+</component>

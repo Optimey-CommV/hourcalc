@@ -1,0 +1,8 @@
+hourcalc (1.0.0-1~deb13) trixie; urgency=medium
+
+  * Package the Linux version of HourCalc: the GTK 4 + libadwaita and the Qt 6
+    front ends on the shared core, the hourcalc launcher that picks one by
+    desktop, the desktop file, the AppStream metadata, the icons and the
+    manual page.
+
+ -- Optimey CommV <335730383+optimey@users.noreply.github.com>  Sat, 10 Oct 2026 20:30:00 +0200

@@ -1,0 +1,54 @@
+#!/bin/sh
+# SPDX-FileCopyrightText: 2026 Optimey CommV
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# hourcalc - starts the HourCalc front end that fits the desktop (docs/LINUX.md, section 4).
+#
+#   KDE (XDG_CURRENT_DESKTOP contains KDE)   hourcalc-qt   (Qt 6 Widgets)
+#   everything else                          hourcalc-gtk  (GTK 4 + libadwaita)
+#
+# HOURCALC_UI=gtk or HOURCALC_UI=qt (in any case) overrides the choice. If the wanted front end
+# is not installed the other one is used (with a note on stderr when it was asked for by name).
+# All arguments go to the front end unchanged.
+#
+# The directory of the front ends is fixed here and cannot be changed from the environment (a
+# script that starts a program from a directory named by a variable would run whatever that
+# variable points to). The launcher test (test-launcher.sh) runs a copy in which this one line
+# is replaced.
+# This file is a template of linux/data/meson.build: the libexec directory is filled in at
+# build time.
+
+libexecdir="@LIBEXECDIR@"
+
+# The desktop decides ...
+case "${XDG_CURRENT_DESKTOP:-}" in
+    *KDE* | *kde*) want=qt ;;
+    *) want=gtk ;;
+esac
+
+# ... unless the user said otherwise.
+asked=no
+ui=$(printf '%s' "${HOURCALC_UI:-}" | tr 'A-Z' 'a-z')
+case "$ui" in
+    gtk | qt)
+        want="$ui"
+        asked=yes
+        ;;
+    "") ;;
+    *) echo "hourcalc: ignoring HOURCALC_UI='$HOURCALC_UI' (use gtk or qt)" >&2 ;;
+esac
+
+if [ "$want" = qt ]; then other=gtk; else other=qt; fi
+
+if [ -x "$libexecdir/hourcalc-$want" ]; then
+    exec "$libexecdir/hourcalc-$want" "$@"
+fi
+if [ -x "$libexecdir/hourcalc-$other" ]; then
+    if [ "$asked" = yes ]; then
+        echo "hourcalc: the $want front end is not installed, using $other" >&2
+    fi
+    exec "$libexecdir/hourcalc-$other" "$@"
+fi
+
+echo "hourcalc: no front end found in $libexecdir" >&2
+exit 127

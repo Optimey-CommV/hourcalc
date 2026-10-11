@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Optimey CommV
+# SPDX-License-Identifier: GPL-3.0-or-later
+option('gtk', type : 'boolean', value : true, description : 'Build the GTK4 + libadwaita front end')
+option('qt', type : 'boolean', value : true, description : 'Build the Qt6 Widgets front end')
+option('tests', type : 'boolean', value : true, description : 'Build the test programs and test hooks')

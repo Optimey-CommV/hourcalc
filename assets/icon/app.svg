@@ -1,0 +1,11 @@
+<!-- SPDX-FileCopyrightText: 2026 Optimey CommV -->
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+<defs><linearGradient id="g" gradientUnits="userSpaceOnUse" x1="20" y1="20" x2="236" y2="236"><stop offset="0" stop-color="#28C4E6"/><stop offset="1" stop-color="#0B7FAF"/></linearGradient></defs>
+<path d="M149,107 L149,22.06 A108,108 0 0 1 233.94,107 Z" fill="url(#g)" stroke="url(#g)" stroke-width="20" stroke-linejoin="round"/>
+<path d="M149,149 L149,233.94 A108,108 0 0 0 233.94,149 Z" fill="url(#g)" stroke="url(#g)" stroke-width="20" stroke-linejoin="round"/>
+<path d="M107,149 L107,233.94 A108,108 0 0 1 22.06,149 Z" fill="url(#g)" stroke="url(#g)" stroke-width="20" stroke-linejoin="round"/>
+<path d="M110,110 L110,18.47 A111,111 0 0 0 18.47,110 Z" fill="none" stroke="url(#g)" stroke-width="14" stroke-linejoin="round"/>
+<path d="M128 128L128 52" stroke="#1CA8D0" stroke-width="30" stroke-linecap="round"/>
+<path d="M128 128L128 52" stroke="#FFFFFF" stroke-width="20" stroke-linecap="round"/>
+</svg>
