@@ -316,9 +316,8 @@ tools/wsl-sync.ps1      copy the repo into a WSL distro for building
   `1.0.0-1~ubuntu26.04` dpkg-source warns that the version suggests Ubuntu changes without an
   `XSBC-Original-Maintainer` field. A source package built that way is lintian-clean on Debian; there is no
   script for it because nothing needs one yet.
-- Application ID (desktop file name, D-Bus name, metainfo id): placeholder
-  `io.github.Optimey_CommV.HourCalc`, defined in one place per component so it can be changed when
-  the owner confirms the repository/domain.
+- Application ID (desktop file name, D-Bus name, metainfo id): `be.optimey.HourCalc`
+  (the owner's domain optimey.be), defined in one place per component (`app_id` in meson.build).
 - Versions: `1.0.0-1~deb13` (built in Debian 13) and `1.0.0-1~ubuntu26.04` (built in Ubuntu 26.04);
   output `dist\linux\debian13\` and `dist\linux\ubuntu26.04\`.
 - `lintian` clean (no errors; warnings justified or fixed), `desktop-file-validate` and

@@ -26,7 +26,7 @@ void InitToolkit(const char* font) {
     if (scale && *scale && atof(scale) > 0) g_object_set(s, "gtk-xft-dpi", (int)(96.0 * 1024.0 * atof(scale) + 0.5), nullptr);
     // What GNOME shows in the header bar: the close button only (a bare GTK has minimize and maximize as well).
     g_object_set(s, "gtk-decoration-layout", ":close", nullptr);
-    g_app = GTK_APPLICATION(adw_application_new("io.github.Optimey_CommV.HourCalc.Test", G_APPLICATION_NON_UNIQUE));
+    g_app = GTK_APPLICATION(adw_application_new("be.optimey.HourCalc.Test", G_APPLICATION_NON_UNIQUE));
     GError* err = nullptr;
     if (!g_application_register(G_APPLICATION(g_app), nullptr, &err)) {
         g_printerr("cannot register the test application: %s\n", err ? err->message : "?");

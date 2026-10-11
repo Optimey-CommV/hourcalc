@@ -208,7 +208,7 @@ int MeasureChild(char* argv0) {
 
 // The floor: a libadwaita application with an empty window (one label), nothing else.
 int MeasureChildEmpty(char* argv0) {
-    AdwApplication* app = adw_application_new("io.github.Optimey_CommV.HourCalc.Empty", G_APPLICATION_NON_UNIQUE);
+    AdwApplication* app = adw_application_new("be.optimey.HourCalc.Empty", G_APPLICATION_NON_UNIQUE);
     g_signal_connect(app, "activate", G_CALLBACK(+[](GApplication* a, gpointer) {
                          g_tActivate = NowNs();
                          GtkWidget* win = adw_application_window_new(GTK_APPLICATION(a));

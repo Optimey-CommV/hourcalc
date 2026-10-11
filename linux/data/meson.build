@@ -13,7 +13,7 @@
 libexec_dir = get_option('prefix') / get_option('libexecdir') / 'hourcalc'
 
 # AppStream wants an id for the developer too, in lower case: the application id without its
-# last element (io.github.Optimey_CommV.HourCalc -> io.github.optimey_commv).
+# last element (be.optimey.HourCalc -> be.optimey).
 id_parts = app_id.split('.')
 assert(id_parts.length() >= 3, 'app_id must be a reverse-DNS name with at least three elements')
 developer_parts = []
