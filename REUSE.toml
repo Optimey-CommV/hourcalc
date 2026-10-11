@@ -22,3 +22,10 @@ path = [
 ]
 SPDX-FileCopyrightText = "2026 Optimey CommV"
 SPDX-License-Identifier = "GPL-3.0-or-later"
+
+# The APT repository metadata written by tools/apt-repo.sh: signed indexes, the public key and
+# the .sources files, whose formats cannot carry a header (apt/index.html has its own).
+[[annotations]]
+path = "apt/**"
+SPDX-FileCopyrightText = "2026 Optimey CommV"
+SPDX-License-Identifier = "GPL-3.0-or-later"

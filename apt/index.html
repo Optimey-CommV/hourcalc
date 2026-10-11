@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+SPDX-FileCopyrightText: 2026 Optimey CommV
+SPDX-License-Identifier: GPL-3.0-or-later
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Optimey APT repository</title>
+<style>
+:root { color-scheme: light dark; --bg: #f7f9fb; --fg: #1b1b1b; --muted: #5c5c5c; --code: #e9eef2; --link: #0067c0; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #202020; --fg: #f3f3f3; --muted: #b5b5b5; --code: #2d2d2d; --link: #4cc2ff; }
+}
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 "Segoe UI", system-ui, sans-serif; }
+main { max-width: 46rem; margin: 0 auto; padding: 2rem 1rem 3rem; }
+h1 { font-size: 1.6rem; margin: 0 0 .25rem; }
+h2 { font-size: 1.15rem; margin: 2rem 0 .5rem; }
+p { margin: .5rem 0; }
+.muted { color: var(--muted); }
+pre { background: var(--code); padding: .75rem 1rem; border-radius: 6px; overflow-x: auto; font-size: .9rem; }
+code { font-family: Consolas, "DejaVu Sans Mono", monospace; }
+a { color: var(--link); }
+</style>
+</head>
+<body>
+<main>
+<h1>Optimey APT repository</h1>
+<p class="muted">Packages from <a href="https://optimey.be">Optimey</a> for Debian 13 and Ubuntu 26.04 LTS, amd64.</p>
+
+<h2>Debian 13 (trixie)</h2>
+<pre><code>sudo wget -O /etc/apt/sources.list.d/optimey.sources https://apt.optimey.be/debian13.sources
+sudo apt update
+sudo apt install hourcalc</code></pre>
+
+<h2>Ubuntu 26.04 LTS (resolute)</h2>
+<pre><code>sudo wget -O /etc/apt/sources.list.d/optimey.sources https://apt.optimey.be/ubuntu26.04.sources
+sudo apt update
+sudo apt install hourcalc</code></pre>
+
+<p>The <code>.sources</code> file holds the address of this repository and its public key;
+<code>apt</code> trusts that key for this repository only. Updates then arrive with the normal system
+updates. To remove the repository, delete <code>/etc/apt/sources.list.d/optimey.sources</code>.</p>
+
+<h2>Signing key</h2>
+<p><code>Optimey CommV APT repository</code>, Ed25519, fingerprint<br>
+<code>A243 70A9 56BF B9F0 FE66 D1D7 332E 513D AD86 6F27</code>
+(<a href="optimey.asc">optimey.asc</a>).</p>
+
+<h2>Packages</h2>
+<p><a href="https://github.com/Optimey-CommV/hourcalc">HourCalc</a>: convert between h:mm and decimal
+hours and calculate with hours. The packages here are the same files as the
+<a href="https://github.com/Optimey-CommV/hourcalc/releases">GitHub releases</a>.</p>
+</main>
+</body>
+</html>

@@ -46,12 +46,34 @@ To build it:
 
 ## Installation
 
+**Windows:** download `HourCalc-<version>-windows-x64.exe` from the
+[releases](https://github.com/Optimey-CommV/hourcalc/releases) and run it. It is portable: there
+is nothing to install.
+
+**Debian 13 and Ubuntu 26.04:** add the Optimey APT repository and install the package; updates
+then arrive with the normal system updates.
+
+```sh
+# Debian 13
+sudo wget -O /etc/apt/sources.list.d/optimey.sources https://apt.optimey.be/debian13.sources
+# Ubuntu 26.04 LTS
+sudo wget -O /etc/apt/sources.list.d/optimey.sources https://apt.optimey.be/ubuntu26.04.sources
+
+sudo apt update
+sudo apt install hourcalc
+```
+
+The `.sources` file carries the repository's public key, "Optimey CommV APT repository", fingerprint
+`A243 70A9 56BF B9F0 FE66 D1D7 332E 513D AD86 6F27`. The same `.deb` files are on the releases page.
+
+### Building from source
+
 ```sh
 git clone https://github.com/Optimey-CommV/hourcalc.git
 cd hourcalc
 ```
 
-### Windows
+#### Windows
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File build.ps1
@@ -61,7 +83,7 @@ This builds `dist\HourCalc.exe` and runs all tests (C++ unit tests, the C# refer
 differential tests against the reference and the headless UI self test). `-SkipTests` builds only.
 The result is one portable exe of about 200 KB: copy it anywhere and run it.
 
-### Linux
+#### Linux
 
 On Debian 13 or Ubuntu 26.04:
 
@@ -143,7 +165,7 @@ missing or invalid value means the default; delete the file to go back to the de
 written next to the exe, no admin rights are needed and nothing goes into the registry.
 
 The design documents in [docs/](docs/) describe the behaviour in detail (`SPEC.md`), the Windows
-build (`NATIVE.md`, `SIZE.md`) and the Linux build (`LINUX.md`).
+build (`NATIVE.md`, `SIZE.md`) and the Linux build and the APT repository (`LINUX.md`).
 
 ## Contributing
 

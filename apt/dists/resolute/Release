@@ -1,0 +1,10 @@
+Origin: Optimey
+Label: Optimey
+Suite: resolute
+Codename: resolute
+Date: Sun, 11 Oct 2026 17:45:18 UTC
+Architectures: amd64
+Components: main
+Description: Optimey packages for Ubuntu 26.04 LTS (resolute)
+SHA256:
+ e5daf90b029f892fc90f28000db93935b5563da5b64887b6753997b42d4cd010 1453 main/binary-amd64/Packages

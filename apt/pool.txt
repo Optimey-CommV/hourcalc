@@ -1,0 +1,3 @@
+# suite sha256 path url (written by tools/apt-repo.sh)
+trixie 646fac22f944f7430225612596f5a3980bc5b98b4b00330756a5995f35be8e6e pool/main/h/hourcalc/hourcalc_1.0.0-1.deb13_amd64.deb https://github.com/Optimey-CommV/hourcalc/releases/download/v1.0.0/hourcalc_1.0.0-1.deb13_amd64.deb
+resolute d5c1f0d64023b634942c702d8c322ddc64142bc38391e45263794ac943236594 pool/main/h/hourcalc/hourcalc_1.0.0-1.ubuntu26.04_amd64.deb https://github.com/Optimey-CommV/hourcalc/releases/download/v1.0.0/hourcalc_1.0.0-1.ubuntu26.04_amd64.deb

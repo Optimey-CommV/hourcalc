@@ -1,0 +1,17 @@
+# Optimey APT repository for Debian 13 (trixie): https://apt.optimey.be
+# Save as /etc/apt/sources.list.d/optimey.sources
+Types: deb
+URIs: https://apt.optimey.be
+Suites: trixie
+Components: main
+Architectures: amd64
+Signed-By:
+ -----BEGIN PGP PUBLIC KEY BLOCK-----
+ .
+ mDMEasvI5BYJKwYBBAHaRw8BAQdAL1jcJcWh7mG+ayyly017dZDPjsMSuqgKQ5Yj
+ dmBpQja0HE9wdGltZXkgQ29tbVYgQVBUIHJlcG9zaXRvcnmIlgQTFgoAPhYhBKJD
+ cKlWv7nw/mbR1zMuUT2thm8nBQJqy8jkAhsDBQkSzAMABQsJCAcCBhUKCQgLAgQW
+ AgMBAh4BAheAAAoJEDMuUT2thm8nMJ0BALclHiEyNwfT+nQPP7RPx7gC5GuSFlKe
+ JrlhgIyAJ573AP9HaojUIIW1xFg9HdrIB3LG9EQcdhryW1QX5f/QVFOlCQ==
+ =ayQB
+ -----END PGP PUBLIC KEY BLOCK-----

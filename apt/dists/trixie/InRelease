@@ -1,0 +1,20 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Origin: Optimey
+Label: Optimey
+Suite: trixie
+Codename: trixie
+Date: Sun, 11 Oct 2026 17:45:17 UTC
+Architectures: amd64
+Components: main
+Description: Optimey packages for Debian 13 (trixie)
+SHA256:
+ 9b0607318afcd5c831950cb3d575d524967aeea96c64bc2d66f8a265518e5eb6 1438 main/binary-amd64/Packages
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSiQ3CpVr+58P5m0dczLlE9rYZvJwUCasvLLQAKCRAzLlE9rYZv
+JxDnAQCsBCsBJc9vDfuv1jKkxBPR9iNFs+X0x4AR+2lEsf4qsgEA8b/VOwK9QycQ
+w6SHJQjplyn9y7bumML5hHBfdrXHug4=
+=q2Gd
+-----END PGP SIGNATURE-----

@@ -323,6 +323,45 @@ tools/wsl-sync.ps1      copy the repo into a WSL distro for building
 - `lintian` clean (no errors; warnings justified or fixed), `desktop-file-validate` and
   `appstreamcli validate` clean.
 
+### 5. APT repository (`apt/`, https://apt.optimey.be)
+
+- Users add one file, `/etc/apt/sources.list.d/optimey.sources` (`apt/debian13.sources` or
+  `apt/ubuntu26.04.sources`, deb822 with the public key inline in `Signed-By`), and then install and
+  update `hourcalc` with apt. Suites are the codenames: `trixie` for `~deb13` packages, `resolute`
+  for `~ubuntu26.04` ones; one component `main`, architecture `amd64`.
+- Only the metadata is in git: `apt/dists/<suite>/{Release,InRelease,Release.gpg}`,
+  `main/binary-amd64/Packages` (uncompressed, it is a few KB), the public key `apt/optimey.asc`, the
+  `.sources` files, `apt/index.html` and `apt/pool.txt`. The packages stay release assets:
+  `pool.txt` lists, per package, the suite, its SHA-256, its path in the repository
+  (`pool/main/h/hourcalc/<asset name>`, the name GitHub gave the asset, so without `~`) and its
+  release URL.
+- `.github/workflows/apt.yml` publishes on every change to `apt/` on main: it copies `apt/`,
+  downloads every package in `pool.txt`, checks its SHA-256, checks every `InRelease` and
+  `Release.gpg` with `gpgv` against `apt/optimey.asc` and every index against its `Release`, and
+  only then deploys to GitHub Pages (custom domain `apt.optimey.be`, a CNAME to
+  `optimey-commv.github.io`).
+- Signing key: "Optimey CommV APT repository", Ed25519, fingerprint
+  `A243 70A9 56BF B9F0 FE66 D1D7 332E 513D AD86 6F27`, expires 2036-10-08. The secret key is kept
+  by the owner outside the repository and outside GitHub, without a passphrase so that signing
+  runs unattended; it is never a CI secret. Extending the expiry means every user downloads the
+  `.sources` file again, since it carries the key.
+- A new release: publish the .debs as release assets first, then
+  `tools/apt-repo.sh --key <secret key> --add <url of the deb13 asset> --add <url of the ubuntu26.04 asset>`
+  (on Debian or Ubuntu with gnupg including gpg-agent, dpkg-dev and curl; from Windows
+  `tools\apt-repo.ps1 -Key <file> -Add <url>,<url>`, which runs it in the WSL Ubuntu, because the WSL
+  Debian has no gpg-agent). The script checks each download against the release's
+  `SHA256SUMS.txt`, picks the suite from the version suffix, refuses a package that is already
+  listed, rebuilds every index with all versions (`dpkg-scanpackages --multiversion`), signs
+  (`InRelease` and `Release.gpg`, SHA-512) and verifies. Without `--add` it only rebuilds and
+  signs. Commit `apt/` on a branch, open a pull request, merge: the workflow does the rest.
+- Measured on 2026-10-11 as a normal user with private apt state directories against a local copy
+  of the site, on both distros (Debian checks signatures with `sqv`, Ubuntu with `gpgv`):
+  `apt-get update`, `apt-cache policy` and `apt-get install --simulate` find
+  `1.0.0-1~deb13` and `1.0.0-1~ubuntu26.04`, and `apt-get download` gives the release asset byte for
+  byte. A changed `InRelease`, another key in `Signed-By` and a changed package are each refused
+  (exit code 100). With a throwaway key, a second version (1.0.1) becomes the candidate next to
+  1.0.0, and adding the same file twice or a package without a known suffix fails.
+
 ## Acceptance (all measured)
 
 1. Core: core_tests and all differential suites 0 failures/mismatches on Windows, Debian 13 and
