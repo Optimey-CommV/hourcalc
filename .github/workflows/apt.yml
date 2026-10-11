@@ -1,0 +1,70 @@
+# SPDX-FileCopyrightText: 2026 Optimey CommV
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# Publishes the APT repository on GitHub Pages, https://apt.optimey.be (docs/LINUX.md,
+# section 5). The signed metadata comes from apt/ (tools/apt-repo.sh writes it); the packages
+# come from the release assets listed in apt/pool.txt. Nothing is published unless every package
+# matches the SHA-256 in pool.txt and every InRelease verifies with apt/optimey.asc.
+
+name: apt
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apt/**"
+      - ".github/workflows/apt.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Assemble the site
+        run: |
+          set -eu
+          mkdir site
+          cp -R apt/. site/
+          grep -v '^#' apt/pool.txt | while read -r suite sha path url; do
+            [ -n "$suite" ] || continue
+            mkdir -p "site/${path%/*}"
+            curl -fsSL --retry 3 -o "site/$path" "$url"
+            echo "$sha  site/$path" | sha256sum -c -
+          done
+      - name: Verify the signatures and the indexes
+        run: |
+          set -eu
+          gpg --batch --dearmor < apt/optimey.asc > "$RUNNER_TEMP/optimey.gpg"
+          for d in site/dists/*/; do
+            gpgv --keyring "$RUNNER_TEMP/optimey.gpg" "$d/InRelease"
+            gpgv --keyring "$RUNNER_TEMP/optimey.gpg" "$d/Release.gpg" "$d/Release"
+            # every index listed under SHA256 in Release must match
+            awk '/^SHA256:/ { s = 1; next } /^[^ ]/ { s = 0 } s { print $1 "  " $3 }' "$d/Release" \
+              | (cd "$d" && sha256sum -c -)
+          done
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9  # v5.0.0
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346  # v5.0.1

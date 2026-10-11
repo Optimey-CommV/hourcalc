@@ -1,0 +1,10 @@
+Origin: Optimey
+Label: Optimey
+Suite: trixie
+Codename: trixie
+Date: Sun, 11 Oct 2026 17:45:17 UTC
+Architectures: amd64
+Components: main
+Description: Optimey packages for Debian 13 (trixie)
+SHA256:
+ 9b0607318afcd5c831950cb3d575d524967aeea96c64bc2d66f8a265518e5eb6 1438 main/binary-amd64/Packages
