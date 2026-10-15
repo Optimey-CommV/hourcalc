@@ -8,7 +8,7 @@
 //
 //   differential.exe <hc_cli.exe> [--quick] [--threads=N] [--only=<text in suite name>]
 //   differential.exe --cli "<command line>" [--quick] [--threads=N] [--only=<text>]
-//     the native program through a command line, for the Linux build: --cli "wsl.exe -d Debian --cd / -- <path of hc_cli>"
+//     the native program through a command line, for the Linux build: --cli "ssh.exe -T -o BatchMode=yes <host> <path of hc_cli>"
 //
 // Suites: SPEC example tables; exhaustive converter strings; boundary converter strings; exhaustive
 // calculator key sequences; random calculator sequences (fixed seed, Paste and decimal place
@@ -147,7 +147,7 @@ static class Differential
             _out = new StreamReader(_p.StandardOutput.BaseStream, Encoding.ASCII, false, 1 << 16);
             if (arguments.Length > 0)
             {
-                // Through a command line (wsl.exe ...) anything may be printed in front of the first answer: wait for "pong".
+                // Through a command line (ssh.exe ...) anything may be printed in front of the first answer: wait for "pong".
                 byte[] ping = Encoding.ASCII.GetBytes("ping\n");
                 _in.Write(ping, 0, ping.Length);
                 _in.Flush();
@@ -202,7 +202,7 @@ static class Differential
     // ---------------------------------------------------------------- where the native program runs
 
     // --cli "<command line>" starts the native program through a command line instead of as a file on this machine, for example
-    //   --cli "wsl.exe -d Debian --cd / -- /home/<user>/hc-core-build/native/core/hc_cli"   (the Linux build).
+    //   --cli "C:\Windows\System32\OpenSSH\ssh.exe -T -o BatchMode=yes hourcalc-debian ~/hc-core-build/native/core/hc_cli"   (the Linux build).
     // That program does not share this process's file system, environment or user culture. The tests then reach its files through
     // the fs.* commands of hc_cli (N, NWrite, NRead ...), take the "user" decimal separator from its answer, and replace the checks
     // that only exist on Windows (a file locked by another program, the file attributes, %LOCALAPPDATA%) by their Linux
@@ -1905,7 +1905,7 @@ static class Differential
             else if (a.StartsWith("--cli=")) _cliCmd = a.Substring(6);
             else _cliPath = Path.GetFullPath(a);
         }
-        // Through a command line (wsl.exe) the native processes share the CPUs of the virtual machine: fewer workers by default.
+        // Through a command line (ssh.exe) the native processes share the CPUs of the Linux machine: fewer workers by default.
         if (_cliCmd != null && !threadsGiven) _threads = Math.Min(_threads, 6);
         if (_cliCmd == null && (_cliPath == null || !File.Exists(_cliPath)))
         {
@@ -1937,7 +1937,7 @@ static class Differential
         var userCulture = CultureInfo.CurrentCulture;
         if (_linux)
         {
-            // The user of the native program is a Linux user: its decimal separator is the one it says it has (LANG in WSL).
+            // The user of the native program is a Linux user: its decimal separator is the one it says it has (LANG on that machine).
             _pool[0].Query("sep \\e");
             var uc = new CultureInfo("en-US", false);
             uc.NumberFormat.NumberDecimalSeparator = Unesc(_pool[0].Query("tm.sep"));

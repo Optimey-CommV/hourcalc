@@ -2,13 +2,13 @@
 # SPDX-FileCopyrightText: 2026 Optimey CommV
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-# Builds the HourCalc .deb for the WSL distro this runs in, and checks it (docs/LINUX.md,
+# Builds the HourCalc .deb for the distro this runs on, and checks it (docs/LINUX.md,
 # section 4 and acceptance 5).
 #
-#   bash tools/build-deb.sh          from the copy of the repository in WSL
+#   bash tools/build-deb.sh          from the copy of the repository on the build machine
 #
-# Normally started by tools\build-deb.ps1, which copies the repository in first
-# (tools\wsl-sync.ps1) and copies the results back to dist\linux\<distro>\.
+# Normally started by tools\build-deb.ps1 over SSH, which copies the repository there first
+# (tools\linux-sync.ps1) and copies the results back to dist\linux\<distro>\.
 #
 # What it does:
 #   - works in a clean copy of the tree, <repo>-deb/hourcalc-<version>, next to the repository
@@ -25,8 +25,8 @@
 # Results go to <repo>-deb/result/: the .deb, lintian.txt, checks.txt and contents.txt.
 # The exit status is 0 only when every check passed.
 #
-# HC_JOBS (default 4) is the number of parallel compile jobs; the owner's rule is that WSL
-# never gets more than 8 processors, and other work runs next to a build.
+# HC_JOBS (default 4) is the number of parallel compile jobs; the Debian build machine has 4
+# cores and the Ubuntu one 2, and other work runs next to a build.
 
 set -euo pipefail
 

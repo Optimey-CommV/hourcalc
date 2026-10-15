@@ -53,7 +53,8 @@ work=$(umask 077 && mktemp -d "$tmp/apt-repo.XXXXXX")
 export GNUPGHOME="$work/gnupg"
 cleanup() { gpgconf --kill gpg-agent 2>/dev/null || true; rm -rf "$work"; }
 trap cleanup EXIT
-trap 'exit 1' HUP INT TERM
+# PIPE too: over ssh without a terminal a lost connection gives no HUP, only a failed write.
+trap 'exit 1' HUP INT TERM PIPE
 (umask 077 && mkdir "$GNUPGHOME")
 
 if [ "$key" = - ]; then

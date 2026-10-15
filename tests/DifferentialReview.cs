@@ -6,7 +6,7 @@
 //
 //   DifferentialReview.exe <hc_cli.exe> [--threads=N] [--only=<text>] [--scale=F] [--cultures=N] [--seed=N] [--state]
 //   DifferentialReview.exe --cli "<command line>" [...]
-//   --cli: the native program through a command line, for the Linux build: --cli "wsl.exe -d Debian --cd / -- <path of hc_cli>"
+//   --cli: the native program through a command line, for the Linux build: --cli "ssh.exe -T -o BatchMode=yes <host> <path of hc_cli>"
 //          (then at most 6 threads unless --threads=N says otherwise; its files are reached through the fs.* commands of hc_cli)
 //   --state: <review_state_cli.exe> instead, calculator suites only; compares the private fields too
 //   --scale=F: the random suites run F of their cases; the finite (exhaustive) suites run every 1/F-th case, spread over
@@ -159,7 +159,7 @@ static class DifferentialReview
             _out = new StreamReader(_p.StandardOutput.BaseStream, Encoding.ASCII, false, 1 << 16);
             if (arguments.Length > 0)
             {
-                // Through a command line (wsl.exe ...) anything may be printed in front of the first answer: wait for "pong".
+                // Through a command line (ssh.exe ...) anything may be printed in front of the first answer: wait for "pong".
                 byte[] ping = Encoding.ASCII.GetBytes("ping\n");
                 _in.Write(ping, 0, ping.Length);
                 _in.Flush();
@@ -213,7 +213,7 @@ static class DifferentialReview
     // ---------------------------------------------------------------- where the native program runs
 
     // --cli "<command line>" starts the native program through a command line instead of as a file on this machine, for example
-    //   --cli "wsl.exe -d Debian --cd / -- /home/<user>/hc-core-build/native/core/hc_cli"   (the Linux build).
+    //   --cli "C:\Windows\System32\OpenSSH\ssh.exe -T -o BatchMode=yes hourcalc-debian ~/hc-core-build/native/core/hc_cli"   (the Linux build).
     // That program does not share this process's file system, environment or user culture. The tests then reach its files through
     // the fs.* commands of hc_cli (N, NWrite, NRead ...), take the "user" decimal separator from its answer, and replace the checks
     // that only exist on Windows (a file locked by another program, the file attributes, %LOCALAPPDATA%) by their Linux
@@ -1875,7 +1875,7 @@ static class DifferentialReview
         var user = CultureInfo.CurrentCulture;
         if (_linux)
         {
-            // The user of the native program is a Linux user: its decimal separator is the one it says it has (LANG in WSL).
+            // The user of the native program is a Linux user: its decimal separator is the one it says it has (LANG on that machine).
             _pool[0].Query("sep \\e");
             var uc = new CultureInfo("en-US", false);
             uc.NumberFormat.NumberDecimalSeparator = Unesc(_pool[0].Query("tm.sep"));
