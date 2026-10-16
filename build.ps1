@@ -26,7 +26,10 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
-$thumbprint = 'DC5A657A60F166815ACDA04E71581F7313553BEA'
+# The Optimey Code Signing certificates (same name and CA), by SHA-1 thumbprint. The second takes over
+# from the first, whose key cannot be exported from the PC it was made on. -Sign uses the first one this
+# PC has, opened by its path Cert:\CurrentUser\My\<thumbprint>; the store is never listed.
+$thumbprints = @('DC5A657A60F166815ACDA04E71581F7313553BEA', '55711A7F59D7D47D0CBF76673718446EB4CF4A61')
 $timestampUrl = 'http://timestamp.digicert.com'
 
 if (-not (Test-Path -LiteralPath (Join-Path $root 'tests'))) { $SkipTests = $true; Write-Host '== No tests\ folder (source archive): skipping tests' }
@@ -41,8 +44,14 @@ if (-not $?) { throw 'build-app.ps1 failed' }
 $exe = Join-Path $root 'dist\HourCalc.exe'
 if ($Sign) {
     Write-Host '== Signing'
-    $cert = Get-ChildItem Cert:\CurrentUser\My | Where-Object { $_.Thumbprint -eq $thumbprint } | Select-Object -First 1
-    if (-not $cert) { throw "Certificate $thumbprint not found in Cert:\CurrentUser\My" }
+    $cert = $null
+    foreach ($t in $thumbprints) {
+        $path = "Cert:\CurrentUser\My\$t"
+        if (Test-Path -LiteralPath $path) { $cert = Get-Item -LiteralPath $path; break }
+    }
+    if (-not $cert) { throw "None of the signing certificates ($($thumbprints -join ', ')) is in Cert:\CurrentUser\My" }
+    if (-not $cert.HasPrivateKey) { throw "Certificate $($cert.Thumbprint) has no private key here" }
+    Write-Host "   with certificate $($cert.Thumbprint)"
     $sig = Set-AuthenticodeSignature -FilePath $exe -Certificate $cert -HashAlgorithm SHA256 -TimestampServer $timestampUrl
     if ($sig.Status -ne 'Valid') { throw "Signing failed: $($sig.Status) $($sig.StatusMessage)" }
 }
