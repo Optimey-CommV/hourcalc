@@ -100,8 +100,9 @@ ends; `hourcalc` starts the Qt one on KDE and the GTK one everywhere else.
 Without a package: `meson setup build --prefix=/usr && ninja -C build && meson test -C build`
 (`-Dgtk=false`, `-Dqt=false` and `-Dtests=false` leave parts out).
 
-From Windows, `tools\build-deb.ps1 -Distro Debian|Ubuntu|Both` builds the packages in the WSL
-distros of the same name and copies them to `dist\linux\`.
+From Windows, `tools\build-deb.ps1 -Distro Debian|Ubuntu|Both` builds the packages on a Debian
+and an Ubuntu machine reached over SSH (docs/LINUX.md, "Build environment") and copies them to
+`dist\linux\`.
 
 ## Usage
 

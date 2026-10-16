@@ -18,28 +18,52 @@ design. Rule for every tool on this PC: measure startup and loaded libraries bef
 
 ## Build environment (measured 2026-10-10)
 
-| distro (WSL) | GTK | libadwaita | Qt |
+| distro | GTK | libadwaita | Qt |
 |---|---|---|---|
 | Debian 13 trixie | 4.18.6 | 1.7.6 | 6.8.2 |
 | Ubuntu 26.04 LTS resolute | 4.22.4 | 1.9.0 | 6.10.2 |
 
-Both WSL distros have the build packages (build-essential, cmake, meson, ninja, pkg-config,
+Both build machines have the build packages (build-essential, cmake, meson, ninja, pkg-config,
 libgtk-4-dev, libadwaita-1-dev, qt6-base-dev, debhelper, lintian, xvfb, desktop-file-utils,
 appstream, fonts). Code must build and run on the OLDER versions (Debian: GTK 4.18, libadwaita 1.7,
 Qt 6.8); use newer API only behind version checks.
 
-WSL has `processors=8` (hard rule in CLAUDE.md: never more). Agents run commands in WSL with
-`wsl.exe -d Debian -- ...` / `wsl.exe -d Ubuntu -- ...` as the normal user; **never `-u root`**
+The build machines are two Linux containers (until 2026-10-13 they were the WSL distros Debian and
+Ubuntu, which became these containers unchanged; WSL is no longer used). The Debian one has 4 cores,
+the Ubuntu one 2. The Windows tools reach them over SSH under the host names `hourcalc-debian` and
+`hourcalc-ubuntu` (every tool takes `-SshHost` for another name), which `~/.ssh/config` of the
+Windows user maps to the address, the normal user and a key of its own:
+
+```
+Host hourcalc-debian
+    HostName <address of the Debian machine>
+Host hourcalc-ubuntu
+    HostName <address of the Ubuntu machine>
+Host hourcalc-debian hourcalc-ubuntu
+    User <normal user>
+    IdentityFile ~/.ssh/<key>
+    IdentitiesOnly yes
+    BatchMode yes
+```
+
+Because every call runs with BatchMode, the host keys of both machines must be in `known_hosts`
+and the public key in `~/.ssh/authorized_keys` of the normal user there; the Windows side needs
+OpenSSH (`ssh.exe`, `scp.exe`) and `tar.exe`, which Windows 10 and 11 include.
+Agents run commands there as that normal user (`ssh hourcalc-debian ...`); **never as root**
 (the owner allowed root only for installing the build packages, which is done). No `sudo`.
+`tools\linux-ssh.ps1` holds what the tools share: the host names, running a bash script there (sent
+base64-encoded, so no quoting rule changes it) and copying results back with scp.
 
-Sources live on K: (the NAS), which WSL cannot see. Build inside WSL from a copy:
-`tools\wsl-sync.ps1 -Distro Debian|Ubuntu` mirrors the repository (without obj, dist, logos,
-legacy, docs\snapshots*) to `~/hourcalc-src` in that distro and restores the executable bits that a
-Windows copy loses (debian/rules, *.sh). Build output stays in WSL (`~/hourcalc-build-*`);
-finished .debs are copied back to `dist\linux\<distro>\`.
+Sources live on K: (the NAS), which the build machines do not mount. Build there from a copy:
+`tools\linux-sync.ps1 -Distro Debian|Ubuntu` mirrors the repository (without obj, dist, logos,
+legacy, docs\snapshots*) to `~/hourcalc-src` on that machine as one tar archive, replacing the
+folder as a whole and keeping the modification times, and restores the executable bits that a
+Windows copy loses (debian/rules, *.sh). Build output stays there (`~/<Name>-deb` for the packages,
+with the results in `~/<Name>-deb/result`, and `~/hc-core-build` for the core tests); finished .debs
+are copied back to `dist\linux\<distro>\`.
 
-**Never show a window on the owner's screen**: WSLg would put Linux windows on his Windows
-desktop. GUI tests run headless only: GTK under `xvfb-run -a` with `GDK_BACKEND=x11`
+**Never show a window on the owner's screen** (with WSLg, Linux windows used to land on his Windows
+desktop; over SSH there is no display, and it stays that way). GUI tests run headless only: GTK under `xvfb-run -a` with `GDK_BACKEND=x11`
 (unset WAYLAND_DISPLAY), Qt with `QT_QPA_PLATFORM=offscreen`. Test binaries never fall back to
 the normal GUI on an unknown option (exit code 2).
 
@@ -54,7 +78,8 @@ linux/data/             desktop file, AppStream metainfo, icons (hicolor), launc
 linux/tests/            Linux test drivers (headless selftests, render to PNG, startup timing)
 meson.build             Linux build: core library, hc_cli, core_tests, both front ends, data
 debian/                 Debian packaging (source format 3.0 (native) or quilt, debhelper compat 13)
-tools/wsl-sync.ps1      copy the repo into a WSL distro for building
+tools/linux-sync.ps1    copy the repo to a Linux build machine (over SSH) for building
+tools/linux-ssh.ps1     what the Windows tools for the Linux build share (SSH host, remote script, scp)
 ```
 
 ### 1. Portable core (owner of `native/core`)
@@ -79,7 +104,7 @@ tools/wsl-sync.ps1      copy the repo into a WSL distro for building
 - Linux: `meson.build` builds `libhccore` (static), `hc_cli`, `core_tests` with g++; the
   differential suites must also run against the Linux `hc_cli` on both distros: give
   `tests\Differential.cs` and `tests\DifferentialReview.cs` an option to start the CLI through a
-  command line such as `wsl.exe -d Debian -- ~/hourcalc-build-debian/hc_cli` and run them.
+  command line such as `ssh.exe -T hourcalc-debian ~/hc-core-build/native/core/hc_cli` and run them.
   0 mismatches on Windows, Debian and Ubuntu.
 
 **Status of the core (done and measured, 2026-10-10).**
@@ -126,11 +151,12 @@ tools/wsl-sync.ps1      copy the repo into a WSL distro for building
   per system: attributes and locked files on Windows, permission bits, XDG paths, symbolic links and locales on Linux;
   the locale checks skip a locale that is not installed, `LOCPATH=<folder made by localedef>` adds some without root).
   `tests\Differential.cs` and `tests\DifferentialReview.cs` take `--cli "<command line>"`, for instance
-  `--cli "wsl.exe -d Debian --cd / -- /home/<user>/hc-core-build/native/core/hc_cli"` (at most 6 workers then). hc_cli
+  `--cli "C:\Windows\System32\OpenSSH\ssh.exe -T -o BatchMode=yes hourcalc-debian ~/hc-core-build/native/core/hc_cli"`
+  (one SSH connection and one hc_cli per worker; until 2026-10-13 `wsl.exe -d Debian --cd / -- ...`). hc_cli
   answers `os` (windows|linux) and, on Linux only, `fs.*` and `env.set` commands, with which the tests reach the files
   of the program under test and replace the Windows-only checks (locked file, file attributes, `%LOCALAPPDATA%`) by their
   Linux counterparts. `tests\linux-core-tests.ps1 -Distro Debian|Ubuntu [-Quick] [-Full]` does everything: sync, meson,
-  core_tests, the three differential runs. Results (the default suite in full, the review test as a sample with
+  core_tests, the three differential runs (one run at a time: they share `obj\core\`). Results (the default suite in full, the review test as a sample with
   `--scale=0.05 --cultures=2`, and with the private state of the calculator): Windows 24,282,067 / 14,049,356 / 453,078
   checks, Debian 13 and Ubuntu 26.04 the same numbers, all 0 mismatches (re-run in full on 2026-10-11 after the review fixes). (Time with 6 workers through `wsl.exe`: the default
   suite 7 to 9 minutes, the review sample 2 to 5, the state run 0.6 to 1.5; Windows with 10 to 12 workers: 6, 3.5 and 1.)
@@ -348,8 +374,8 @@ tools/wsl-sync.ps1      copy the repo into a WSL distro for building
 - A new release: publish the .debs as release assets first, then
   `tools/apt-repo.sh --key <secret key> --add <url of the deb13 asset> --add <url of the ubuntu26.04 asset>`
   (on Debian or Ubuntu with gnupg including gpg-agent, dpkg-dev and curl; from Windows
-  `tools\apt-repo.ps1 -Key <file> -Add <url>,<url>`, which runs it in the WSL Ubuntu, because the WSL
-  Debian has no gpg-agent). The script checks each download against the release's
+  `tools\apt-repo.ps1 -Key <file> -Add <url>,<url>`, which runs it on the Ubuntu build machine over
+  SSH, with the key on the standard input of ssh, because the Debian one has no gpg-agent). The script checks each download against the release's
   `SHA256SUMS.txt`, picks the suite from the version suffix, refuses a package that is already
   listed, rebuilds every index with all versions (`dpkg-scanpackages --multiversion`), signs
   (`InRelease` and `Release.gpg`, SHA-512) and verifies. Without `--add` it only rebuilds and
